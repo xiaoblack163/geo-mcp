@@ -1,0 +1,10 @@
+{
+  "baseUrl": "https://geoapi.yoyi.com.cn/ma",
+  "origin": "http://demo3c.geo.yoyi.com.cn",
+  "credentials": {
+    "userName": "your-username",
+    "passWord": "your-password",
+    "tenantId": 0,
+    "mobileNum": ""
+  }
+}
