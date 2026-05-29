@@ -118,7 +118,3 @@ geo-mcp/
 └── package.json
 ```
 
-## 注意事项
-
-- 调试日志请使用 `console.error`（stderr），不要使用 `console.log`，否则会干扰 MCP 的 stdout 协议通信
-- 切勿提交 `config.json`，请使用 `config.example.json` 作为模板
