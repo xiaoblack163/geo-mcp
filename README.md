@@ -9,6 +9,7 @@
 | `list_brands` | 获取当前用户下的品牌列表 |
 | `get_brand_visibility_report` | 查询品牌可见度、品牌声量、Top1/Top3 可见度，自动对比上期变化 |
 | `get_brand_accuracy_report` | 查询品牌信息准确率，自动对比上期变化 |
+| `get_daily_brand_trend` | 查询品牌每天的品牌可见度、声量、Top1/Top3 可见度趋势数据，可用于绘制趋势图 |
 
 ### 品牌可见度报告
 
@@ -114,7 +115,8 @@ geo-mcp/
 │   ├── index.js          # Tool 注册入口
 │   ├── brand.js          # list_brands
 │   ├── brandVisibility.js # get_brand_visibility_report
-│   └── accuracy.js       # get_brand_accuracy_report
+│   ├── accuracy.js       # get_brand_accuracy_report
+│   └── dailyTrend.js     # get_daily_brand_trend
 └── package.json
 ```
 

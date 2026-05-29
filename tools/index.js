@@ -1,11 +1,13 @@
 import brandVisibilityTools from './brandVisibility.js';
 import brandTools from './brand.js';
 import accuracyTools from './accuracy.js';
+import dailyTrendTools from './dailyTrend.js';
 
 const allTools = [
   ...brandVisibilityTools,
   ...brandTools,
   ...accuracyTools,
+  ...dailyTrendTools,
 ];
 
 /**
