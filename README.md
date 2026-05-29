@@ -7,7 +7,7 @@
 | 工具 | 说明 |
 |------|------|
 | `list_brands` | 获取当前用户下的品牌列表 |
-| `get_brand_visibility_report` | 查询品牌可见度（refRate）、品牌声量（showCount/totalShowCount）、Top1/Top3 可见度，自动对比上期变化 |
+| `get_brand_visibility_report` | 查询品牌可见度、品牌声量、Top1/Top3 可见度，自动对比上期变化 |
 | `get_brand_accuracy_report` | 查询品牌信息准确率，自动对比上期变化 |
 
 ### 品牌可见度报告
@@ -23,7 +23,7 @@
 展示 AI 输出品牌信息的准确率，计算公式：
 
 ```
-准确率 = (总行数 - 错误行数) / 总行数 = 1 - (错误行数 / 总行数)
+准确率 = (总行数 - 错误行数) / 总行数
 ```
 
 ## 安装
@@ -33,22 +33,26 @@
 - Node.js >= 18
 - npm
 
-### 安装依赖
+### 1. 克隆仓库
 
 ```bash
+git clone https://github.com/xiaoblack163/geo-mcp.git
 cd geo-mcp
+```
+
+### 2. 安装依赖
+
+```bash
 npm install
 ```
 
-### 配置
-
-复制示例配置文件并修改：
+### 3. 配置
 
 ```bash
 cp config.example.json config.json
 ```
 
-编辑 `config.json`，填入真实凭据：
+编辑 `config.json`，填入你的凭据：
 
 | 字段 | 说明 |
 |------|------|
@@ -58,58 +62,36 @@ cp config.example.json config.json
 | `credentials.passWord` | 登录密码（明文，MD5 加密后传输） |
 | `credentials.tenantId` | 租户 ID |
 
-## 在 Claude Code 中使用
+## 对接 MCP 客户端
 
-### 方法一：通过命令行添加
+该 Server 通过标准 stdio 传输协议通信，支持任何兼容 MCP 的客户端。
 
-在 Claude Code 会话中执行：
+### 通用配置
 
-```
-/mcp add geo-mcp node /absolute/path/to/geo-mcp/index.js
-```
-
-### 方法二：通过配置文件添加
-
-在 `~/.claude.json` 或 `~/.claude/settings.json` 中添加：
+在所有支持 MCP 的客户端中，添加以下配置：
 
 ```json
 {
   "mcpServers": {
     "geo-mcp": {
       "command": "node",
-      "args": ["/absolute/path/to/geo-mcp/index.js"],
-      "type": "stdio"
+      "args": ["/绝对路径/geo-mcp/index.js"]
     }
   }
 }
 ```
 
-### 方法三：用 MCP Inspector 调试
+### 各客户端配置文件位置
 
-```bash
-npx @modelcontextprotocol/inspector node /absolute/path/to/geo-mcp/index.js
-```
+| 客户端 | 配置文件路径 |
+|--------|-------------|
+| Claude Desktop | `~/Library/Application Support/Claude/claude_desktop_config.json` |
+| Claude Code | `~/.claude.json` 或 `~/.claude/settings.json` |
+| Cursor | `~/.cursor/mcp.json` |
+| Windsurf | `~/.windsurf/mcp_config.json` |
+| Continue.dev | `~/.continue/config.json` |
 
-浏览器打开后（默认 `http://localhost:5173`）即可可视化调用和调试。
-
-### 验证是否生效
-
-重启 Claude Code 后，输入 `/mcp` 查看 server 列表，应显示：
-
-```
-2 servers
-❯ MiniMax · ✔ connected · 2 tools
-❯ geo-mcp · ✔ connected · 2 tools
-```
-
-### 使用示例
-
-在 Claude Code 对话中直接询问：
-
-> "查一下三星最近7天的品牌可见度"
-> "品牌准确度怎么样"
-> "有哪些品牌可以查"
-> "对比上期品牌可见度的变化"
+配置添加后，重启客户端即可生效。AI 助手会根据对话上下文自动调用对应的工具。
 
 ## 认证机制
 
@@ -126,7 +108,8 @@ geo-mcp/
 ├── auth.js               # 认证模块（登录、token 缓存、刷新）
 ├── request.js            # HTTP 客户端（自动注入 token、处理 401）
 ├── httpClient.js         # 共享 HTTPS 客户端
-├── config.json           # 环境配置
+├── config.json           # 环境配置（已 gitignore）
+├── config.example.json   # 配置示例
 ├── tools/
 │   ├── index.js          # Tool 注册入口
 │   ├── brand.js          # list_brands
@@ -137,5 +120,5 @@ geo-mcp/
 
 ## 注意事项
 
-- 调试日志使用 `console.error`（stderr），不会干扰 MCP 的 stdout 协议通信
-- 不要在 handler 中使用 `console.log`，会污染 JSON-RPC 通信
+- 调试日志请使用 `console.error`（stderr），不要使用 `console.log`，否则会干扰 MCP 的 stdout 协议通信
+- 切勿提交 `config.json`，请使用 `config.example.json` 作为模板
